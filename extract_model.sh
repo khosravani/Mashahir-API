@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright  2018  Dezhafzar (Abbas Khosravani).
+# Copyright 2018 Abbas Khosravani.
 
 # This script is intended to extract xvectors for a given audio file.
 
@@ -19,6 +19,7 @@ data=${path}/.tmp$RANDOM
 wavfile=$1
 port=$2
 type=$3
+
 # Speaker model parameters
 min_chunk_size=25
 max_chunk_size=100
@@ -64,17 +65,9 @@ curl -s -X POST http://127.0.0.1:$port/json -d "{
     \"feature_rspecifier\": \"ark:$data/pfeat.ark\",
     \"vector_wspecifier\": \"ark,t:$data/xvector.ark\"}" 1>>$log
 
-# nnet="nnet3-copy --nnet-config=$conf/extract.config $model/final.raw - |"
-# nnet3-xvector-compute \
-#     --use-gpu=$use_gpu \
-#     --min-chunk-size=$min_chunk_size \
-#     --chunk-size=$chunk_size \
-#     --cache-capacity=${cache_capacity} \
-#     "$nnet" ark:$data/pfeat.ark ark,t:$data/xvector.ark 2>>$log
-
 echo `awk '{for(i=3; i < NF; i++) print $i;}' $data/xvector.ark`
 
 # clean up
-#rm -rf $data
+rm -rf $data
 exit 0
 
